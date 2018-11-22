@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "homepage": "https://j-v-a.github.io/js-calculator",
+  "homepage": "https://j-v-a.github.io/js-calculator/",
   "scripts": {
     "dev": "webpack-dev-server --config ./webpack.dev.js --mode development",
     "test": "echo \"No test specified\" && exit 0",
