@@ -1,7 +1,7 @@
 # Javascript Calculator
 
 A simple React Javascript calculator!
-This is my solution to a freecodecamps.org Front End Libraries Project - Build a Drum Machine.
+This is my solution to a freecodecamps.org Front End Libraries Project - Build a JavaScript Calculator.
 <a href="https://j-v-a.github.io/js-calculator/">See live!</a>
 
 ## The requirements:
