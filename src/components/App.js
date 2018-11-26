@@ -1,118 +1,14 @@
 import React from 'react';
 
-/* Data */
-const buttons = [
-  {
-    key: 'C',
-    type: 'operator',
-    id: 'clear'
-  },
-  {
-    key: 'CE',
-    type: 'operator',
-    id: 'clear-last'
-  },
-  {
-    key: '/',
-    type: 'operator',
-    id: 'divide'
-  },
-  {
-    key: '*',
-    type: 'operator',
-    id: 'multiply'
-  },
-  {
-    key: '7',
-    type: 'number',
-    id: 'seven'
-  },
-  {
-    key: '8',
-    type: 'number',
-    id: 'eight'
-  },
-  {
-    key: '9',
-    type: 'number',
-    id: 'nine'
-  },
-  {
-    key: '-',
-    type: 'operator',
-    id: 'subtract'
-  },
-  {
-    key: '4',
-    type: 'number',
-    id: 'four'
-  },
-  {
-    key: '5',
-    type: 'number',
-    id: 'five'
-  },
-  {
-    key: '6',
-    type: 'number',
-    id: 'six'
-  },
-  {
-    key: '+',
-    type: 'operator',
-    id: 'add'
-  },
-  {
-    key: '1',
-    type: 'number',
-    id: 'one'
-  },
-  {
-    key: '2',
-    type: 'number',
-    id: 'two'
-  },
-  {
-    key: '3',
-    type: 'number',
-    id: 'three'
-  },
-  {
-    key: '=',
-    type: 'operator',
-    id: 'equals'
-  },
-  {
-    key: '0',
-    type: 'number',
-    id: 'zero'
-  },
-  {
-    key: '.',
-    type: 'number',
-    id: 'decimal'
-  }
-];
+import Display from './Display';
+import Input from './Input';
 
-/* Helper functions */
-
-function precisionRound(number, precision) {
-  const factor = Math.pow(10, precision);
-  return Math.round(number * factor) / factor;
-}
-
-// Evaluate an array
-function calculateResult(calculation) {
-  try {
-    return precisionRound(eval(calculation.join('')), 5);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-function isOperator(val) {
-  return ['+', '-', '*', '/'].indexOf(val) === -1 ? false : true;
-}
+import buttons from '../data/buttons';
+import {
+  precisionRound,
+  calculateResult,
+  isOperator
+} from '../helpers/calculationHelpers';
 
 /* Calculator */
 class App extends React.Component {
@@ -130,6 +26,7 @@ class App extends React.Component {
   handleClick(event) {
     const val = event.target.innerHTML;
     const calculation = this.state.calculation;
+
     if (this.state.reset && isOperator(val) != true) {
       this.clear();
       this.setState(() => {
@@ -138,6 +35,7 @@ class App extends React.Component {
         };
       });
     }
+
     switch (val) {
       case '=':
         this.setState(() => {
@@ -170,7 +68,8 @@ class App extends React.Component {
       case '-':
       case '*':
       case '/':
-        // Pressing an operator immediately following = should start a new calculation that operates on the result of the previous evaluation.
+        // Pressing an operator immediately following = should start a new calculation that operates
+        // on the result of the previous evaluation.
         if (this.state.reset === true) {
           this.setState(prevState => {
             return {
@@ -180,7 +79,8 @@ class App extends React.Component {
             };
           });
           break;
-          // If 2 or more operators are entered consecutively, the operation performed should be the last operator entered.
+          // If 2 or more operators are entered consecutively, the operation performed should be the
+          // last operator entered.
         } else if (isOperator(calculation[calculation.length - 1])) {
           this.setState(prevState => {
             return {
@@ -275,42 +175,10 @@ class App extends React.Component {
     return (
       <section id="calc-main">
         <Display result={this.state.result} calculation={calculation} />
-        <InputPad buttons={this.state.buttons} onClick={this.handleClick} />
+        <Input buttons={this.state.buttons} onClick={this.handleClick} />
       </section>
     );
   }
 }
-
-const Display = ({ result, calculation }) => (
-  <section id="calc-display">
-    <div id="display">{result}</div>
-    <div id="secondary-display">{calculation}</div>
-  </section>
-);
-
-class InputPad extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    const buttons = this.props.buttons.map(button => (
-      <Button
-        type={button.type}
-        id={button.id}
-        btnKey={button.key}
-        key={button.id}
-        onClick={this.props.onClick}
-      />
-    ));
-
-    return <section id="calc-input">{buttons}</section>;
-  }
-}
-
-const Button = ({ type, id, onClick, btnKey }) => (
-  <div className={'btn btn-' + type} id={id} onClick={onClick}>
-    {btnKey}
-  </div>
-);
 
 export default App;
